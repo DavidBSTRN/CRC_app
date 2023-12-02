@@ -49,10 +49,19 @@ def find_gen_poly(n, k):
 
 
 def bin_to_poly(bin_num):
-    rev_num = bin_num[::-1]
     poly = ""
 
+    poly += f"x^{len(bin_num) - 1}"
 
+    for i in range(1, len(bin_num) - 2):
+        if bin_num[i] == "1":
+            poly += f" + x^{len(bin_num) - i - 1}"
+
+    if bin_num[len(bin_num) - 2] == "1":
+        poly += " + x"
+
+    if bin_num[len(bin_num) - 1] == "1":
+        poly += " + 1"
 
     return poly
 
