@@ -1,68 +1,71 @@
-def mod_2(num, div):
-    num = list(num)
-    div = list(div)
+import crc_functions as crc
+import customtkinter as ctk
 
-    while len(num) >= len(div):
-        for i in range(0, len(div)):
-            num[i] = str(int(num[i]) ^ int(div[i]))
+# set theme
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("dark-blue")
 
-        while len(num) >= len(div) and num[0] == "0":
-            num.pop(0)
+# main
+app = ctk.CTk()
+app.title("CRC encode and decode")
+app.geometry("800x480")
 
-    remainder = "".join(num)
+# tabview
+tabview = ctk.CTkTabview(app, width = 780, height = 460)
+tabview.pack()
 
-    return remainder
+# my tabs
+encode_tab = tabview.add("Encode")
+decode_tab = tabview.add("Decode")
+
+# FUNCTION
+def get_poly():
+    try:
+        user_code = nk_enter.get()
+        nk = []
+        for i in user_code.split(","):
+            nk.append(int(i))
+
+        gen_poly = ' | '.join(crc.find_gen_poly(nk[0], nk[1]))
+
+        gen_label.configure(text = f"Gen. pol: {gen_poly}")
+        nk_label.configure(text="")
+    except:
+        gen_label.configure(text="")
+        nk_label.configure(text = "Input the 'n,k'...(7,4)")
+
+def encode_msg():
+    pass
+
+# ENCODE
+# entry 'n,k'
+nk_enter = ctk.CTkEntry(encode_tab, placeholder_text = "Code 'n,k'")
+nk_enter.grid(row = 0, column = 0, padx = 10, pady = (10,0))
+
+# "n,k' label
+nk_label = ctk.CTkLabel(encode_tab, text = "")
+nk_label.grid(row = 1, column = 0, padx = 10, pady = (10,0))
+
+# gen polynomials label
+gen_label = ctk.CTkLabel(encode_tab, text = "")
+gen_label.grid(row = 0, column = 2, padx = 10, pady = (10,0))
+
+# Gen button
+gen_button = ctk.CTkButton(encode_tab, text = "Get gen.pol.", command = get_poly)
+gen_button.grid(row = 0, column = 1, padx = 10, pady = (10,0))
+
+# entry message
+msg_enter = ctk.CTkEntry(encode_tab, placeholder_text = "Enter message")
+msg_enter.grid(row = 2, column = 0, padx = 10, pady = (10,0))
+
+# entry gen poly
+gen_enter = ctk.CTkEntry(encode_tab, placeholder_text = "Enter gen.pol.")
+gen_enter.grid(row = 3, column = 0, padx = 10, pady = (10,0))
+
+# Encode button
+encode_button = ctk.CTkButton(encode_tab, text = "Encode", command = encode_msg)
+encode_button.grid(row = 2, column = 1, padx = 10, pady = (10,0))
 
 
-def encoder(message, poly):
-    exp_mess = message + "0" * (len(poly) - 1)
-
-    remainder = mod_2(exp_mess, poly)
-    code_message = message + remainder
-
-    return code_message
-
-
-def all_poly(degree):
-    all_poly = []
-
-    for i in range(2**(degree)):
-        poly = "1" + bin(i)[2:].zfill(degree)
-        all_poly.append(poly)
-
-    return all_poly
-
-
-def find_gen_poly(n, k):
-    n_poly = "1" + "0"*(n-1) + "1"
-    all_polynomials = all_poly(n-k)
-
-    gen_poly = []
-
-    for i in all_polynomials:
-        remainder = mod_2(n_poly, i)
-
-        if int(remainder) == 0:
-            gen_poly.append(i)
-
-    return gen_poly
-
-
-def bin_to_poly(bin_num):
-    poly = ""
-
-    poly += f"x^{len(bin_num) - 1}"
-
-    for i in range(1, len(bin_num) - 2):
-        if bin_num[i] == "1":
-            poly += f" + x^{len(bin_num) - i - 1}"
-
-    if bin_num[len(bin_num) - 2] == "1":
-        poly += " + x"
-
-    if bin_num[len(bin_num) - 1] == "1":
-        poly += " + 1"
-
-    return poly
-
+app.mainloop()
 
