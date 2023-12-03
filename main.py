@@ -35,16 +35,22 @@ def get_poly():
         nk_label.configure(text = "Input the 'n,k'...(7,4)")
 
 def encode_msg():
-    try:
-        message = msg_enter.get()
-        key = gen_enter.get()
+    message = msg_enter.get()
+    key = gen_enter.get()
 
-        code_message = crc.encoder(message, key)
+    code_message = crc.encoder(message, key)
 
-        bin_msg.configure(text = f"{code_message}")
-        poly_msg.configure(text = f"{crc.bin_to_poly(code_message)}")
-    except:
-        print("====")
+    bin_msg.configure(text = f"{code_message}")
+    poly_msg.configure(text = f"{crc.bin_to_poly(code_message)}")
+
+def decode_msg():
+    message = msg_enter2.get()
+    key = gen_enter2.get()
+
+    if int(crc.mod_2(message, key)) == 0:
+        decode_label.configure(text = "Message is correct.")
+    else:
+        decode_label.configure(text="Message is incorrect.")
 
 # ENCODE
 # entry 'n,k'
@@ -82,5 +88,21 @@ bin_msg.grid(row = 2, column = 2, padx = 10, pady = (10,0))
 poly_msg = ctk.CTkLabel(encode_tab, text = "")
 poly_msg.grid(row = 3, column = 2, padx = 10, pady = (10,0))
 
-app.mainloop()
+# DECODE
+# entry message
+msg_enter2 = ctk.CTkEntry(decode_tab, placeholder_text = "Enter message")
+msg_enter2.grid(row = 0, column = 0, padx = 10, pady = (10,0))
 
+# entry gen.poly.
+gen_enter2 = ctk.CTkEntry(decode_tab, placeholder_text = "Enter gen.pol.")
+gen_enter2.grid(row = 1, column = 0, padx = 10, pady = (10,0))
+
+# decode button
+decode_button = ctk.CTkButton(decode_tab, text = "Decode", command = decode_msg)
+decode_button.grid(row = 0, column = 1, padx = 10, pady = (10,0))
+
+# Decode label
+decode_label = ctk.CTkLabel(decode_tab, text = "")
+decode_label.grid(row = 0, column = 2, padx = 10, pady = (10,0))
+
+app.mainloop()
