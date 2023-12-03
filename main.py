@@ -49,10 +49,12 @@ def decode_msg():
 
     if int(crc.mod_2(message, key)) == 0:
         decode_label.configure(text = "Message is correct.")
-        correct_label.configure(text = "")
+        correct_label.configure(text = f"{message}")
+        poly_label.configure(text = f"{crc.bin_to_poly(message)}")
     else:
         decode_label.configure(text="Message is incorrect.")
         correct_label.configure(text = f"Correct message: {crc.find_mistake(message, key)}")
+        poly_label.configure(text=f"{crc.bin_to_poly(crc.find_mistake(message, key))}")
 
 # ENCODE
 # entry 'n,k'
@@ -109,5 +111,8 @@ decode_label.grid(row = 0, column = 2, padx = 10, pady = (10,0))
 
 correct_label = ctk.CTkLabel(decode_tab, text = "")
 correct_label.grid(row = 1, column = 2, padx = 10, pady = (10,0))
+
+poly_label = ctk.CTkLabel(decode_tab, text = "")
+poly_label.grid(row = 2, column = 2, padx = 10, pady = (10,0))
 
 app.mainloop()
