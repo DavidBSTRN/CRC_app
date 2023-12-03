@@ -35,7 +35,16 @@ def get_poly():
         nk_label.configure(text = "Input the 'n,k'...(7,4)")
 
 def encode_msg():
-    pass
+    try:
+        message = msg_enter.get()
+        key = gen_enter.get()
+
+        code_message = crc.encoder(message, key)
+
+        bin_msg.configure(text = f"{code_message}")
+        poly_msg.configure(text = f"{crc.bin_to_poly(code_message)}")
+    except:
+        print("====")
 
 # ENCODE
 # entry 'n,k'
@@ -66,6 +75,12 @@ gen_enter.grid(row = 3, column = 0, padx = 10, pady = (10,0))
 encode_button = ctk.CTkButton(encode_tab, text = "Encode", command = encode_msg)
 encode_button.grid(row = 2, column = 1, padx = 10, pady = (10,0))
 
+# Code message labels
+bin_msg = ctk.CTkLabel(encode_tab, text = "")
+bin_msg.grid(row = 2, column = 2, padx = 10, pady = (10,0))
+
+poly_msg = ctk.CTkLabel(encode_tab, text = "")
+poly_msg.grid(row = 3, column = 2, padx = 10, pady = (10,0))
 
 app.mainloop()
 
