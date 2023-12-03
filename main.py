@@ -49,8 +49,10 @@ def decode_msg():
 
     if int(crc.mod_2(message, key)) == 0:
         decode_label.configure(text = "Message is correct.")
+        correct_label.configure(text = "")
     else:
         decode_label.configure(text="Message is incorrect.")
+        correct_label.configure(text = f"Correct message: {crc.find_mistake(message, key)}")
 
 # ENCODE
 # entry 'n,k'
@@ -104,5 +106,8 @@ decode_button.grid(row = 0, column = 1, padx = 10, pady = (10,0))
 # Decode label
 decode_label = ctk.CTkLabel(decode_tab, text = "")
 decode_label.grid(row = 0, column = 2, padx = 10, pady = (10,0))
+
+correct_label = ctk.CTkLabel(decode_tab, text = "")
+correct_label.grid(row = 1, column = 2, padx = 10, pady = (10,0))
 
 app.mainloop()
