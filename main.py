@@ -28,7 +28,7 @@ def get_poly():
 
         gen_poly = ' | '.join(crc.find_gen_poly(nk[0], nk[1]))
 
-        gen_label.configure(text = f"Gen. pol: {gen_poly}")
+        gen_label.configure(text = f"Gen. pol ({nk[0]},{nk[1]}): {gen_poly}")
         nk_label.configure(text="")
     except:
         gen_label.configure(text="")
@@ -52,9 +52,11 @@ def decode_msg():
         correct_label.configure(text = f"{message}")
         poly_label.configure(text = f"{crc.bin_to_poly(message)}")
     else:
+        correct_message = ' | '.join(crc.find_mistake(message, key))
+
         decode_label.configure(text="Message is incorrect.")
-        correct_label.configure(text = f"Correct message: {crc.find_mistake(message, key)}")
-        poly_label.configure(text=f"{crc.bin_to_poly(crc.find_mistake(message, key))}")
+        correct_label.configure(text = f"Possible correct message: {correct_message}")
+        poly_label.configure(text="To show polynomial, correct the message")
 
 # ENCODE
 # entry 'n,k'

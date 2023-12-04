@@ -69,15 +69,16 @@ def bin_to_poly(bin_num):
 def find_mistake(message, key):
     remainder = mod_2(message, key)
     message = list(message)
+    correct_messages = []
 
     for i in range(len(message)):
         check_bit = "1" + "0" * i
 
         if int(mod_2(check_bit, key)) == int(remainder):
-            message[len(message) - i - 1] = str(int(message[len(message) - i - 1]) ^ int("1"))
+            temp = message.copy()
+            temp[len(temp) - i - 1] = str(int(temp[len(temp) - i - 1]) ^ int("1"))
+            temp = ''.join(temp)
 
-            break
+            correct_messages.append(temp)
 
-    message = ''.join(message)
-
-    return message
+    return correct_messages
