@@ -35,27 +35,36 @@ def get_poly():
         nk_label.configure(text="Input the 'n,k'...7,4")
 
 def encode_msg():
-    message = msg_enter.get()
-    key = gen_enter.get()
+    try:
+        message = msg_enter.get()
+        key = gen_enter.get()
 
-    code_message = crc.encoder(message, key)
+        code_message = crc.encoder(message, key)
 
-    bin_text.set(f"{code_message}")
-    poly_msg.configure(text=f"{crc.bin_to_poly(code_message)}")
+        bin_text.set(f"{code_message}")
+        poly_msg.configure(text=f"{crc.bin_to_poly(code_message)}")
+    except:
+        bin_text.set(f"Incorrect input.")
+        poly_msg.configure(text="")
 
 def decode_msg():
-    message = msg_enter2.get()
-    key = gen_enter2.get()
+    try:
+        message = msg_enter2.get()
+        key = gen_enter2.get()
 
-    if int(crc.mod_2(message, key)) == 0:
-        decode_label.configure(text="Message is correct.")
-        correct_text.set(f"{message}")
-        poly_label.configure(text=f"{crc.bin_to_poly(message)}")
-    else:
-        correct_message = ' | '.join(crc.find_mistake(message, key))
+        if int(crc.mod_2(message, key)) == 0:
+            decode_label.configure(text="Message is correct.")
+            correct_text.set(f"{message}")
+            poly_label.configure(text=f"{crc.bin_to_poly(message)}")
+        else:
+            correct_message = ' | '.join(crc.find_mistake(message, key))
 
-        decode_label.configure(text="Message is incorrect.")
-        correct_text.set(f"Correction: {correct_message}")
+            decode_label.configure(text="Message is incorrect.")
+            correct_text.set(f"Correction: {correct_message}")
+            poly_label.configure(text="")
+    except:
+        decode_label.configure(text="Incorrect input.")
+        correct_text.set("")
         poly_label.configure(text="")
 
 # ENCODE
