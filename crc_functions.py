@@ -1,4 +1,5 @@
 def mod_2(num, div):
+    """Remainder after modulo_2 for binar nums"""
     num = list(num)
     div = list(div)
 
@@ -15,6 +16,7 @@ def mod_2(num, div):
 
 
 def encoder(message, poly):
+    """Encode message with gen.pol."""
     exp_mess = message + "0" * (len(poly) - 1)
 
     remainder = mod_2(exp_mess, poly)
@@ -24,6 +26,7 @@ def encoder(message, poly):
 
 
 def all_poly(degree):
+    """Generate all pol. of certain degree"""
     all_poly = []
 
     for i in range(2**(degree)):
@@ -34,6 +37,7 @@ def all_poly(degree):
 
 
 def find_gen_poly(n, k):
+    """Find gen.poly for 'n,k' code"""
     n_poly = "1" + "0"*(n-1) + "1"
     all_polynomials = all_poly(n-k)
 
@@ -49,6 +53,7 @@ def find_gen_poly(n, k):
 
 
 def bin_to_poly(bin_num):
+    """Create pol. form from binary"""
     poly = ""
 
     poly += f"x^{len(bin_num) - 1}"
@@ -67,6 +72,7 @@ def bin_to_poly(bin_num):
 
 
 def find_mistake(message, key):
+    """Find error and give possible correct msgs"""
     remainder = mod_2(message, key)
     message = list(message)
     correct_messages = []
