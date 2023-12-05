@@ -1,24 +1,13 @@
 import crc_functions as crc
 import customtkinter as ctk
 
-# set theme
-ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("dark-blue")
+# FUNCTIONS
+def isOkay(new_value):
+    if new_value == "":
+        return True
 
-# main
-app = ctk.CTk()
-app.title("CRC encode and decode")
-app.resizable(False, False)
+    return all(c in '01' for c in new_value)
 
-# tabview
-tabview = ctk.CTkTabview(app)
-tabview.pack()
-
-# my tabs
-encode_tab = tabview.add("Encode")
-decode_tab = tabview.add("Decode")
-
-# FUNCTION
 def get_poly():
     try:
         user_code = nk_enter.get()
@@ -35,23 +24,23 @@ def get_poly():
         nk_label.configure(text="Input the 'n,k'...7,4")
 
 def encode_msg():
-    try:
-        message = msg_enter.get()
-        key = gen_enter.get()
+    message = msg_enter.get()
+    key = gen_enter.get()
 
+    if len(key) != 0:
         code_message = crc.encoder(message, key)
 
         bin_text.set(f"{code_message}")
         poly_msg.configure(text=f"{crc.bin_to_poly(code_message)}")
-    except:
+    else:
         bin_text.set(f"Incorrect input.")
         poly_msg.configure(text="")
 
 def decode_msg():
-    try:
-        message = msg_enter2.get()
-        key = gen_enter2.get()
+    message = msg_enter2.get()
+    key = gen_enter2.get()
 
+    if len(key) != 0:
         if int(crc.mod_2(message, key)) == 0:
             decode_label.configure(text="Message is correct.")
             correct_text.set(f"{message}")
@@ -62,14 +51,32 @@ def decode_msg():
             decode_label.configure(text="Message is incorrect.")
             correct_text.set(f"Correction: {correct_message}")
             poly_label.configure(text="")
-    except:
+    else:
         decode_label.configure(text="Incorrect input.")
         correct_text.set("")
         poly_label.configure(text="")
 
+# set theme
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("dark-blue")
+
+# main
+app = ctk.CTk()
+app.title("CRC encode and decode")
+app.resizable(False, False)
+
+validate_cmd = app.register(isOkay)
+# tabview
+tabview = ctk.CTkTabview(app)
+tabview.pack()
+
+# my tabs
+encode_tab = tabview.add("Encode")
+decode_tab = tabview.add("Decode")
+
 # ENCODE
 # entry 'n,k'
-nk_enter = ctk.CTkEntry(encode_tab, placeholder_text = "Code 'n,k'")
+nk_enter = ctk.CTkEntry(encode_tab)
 nk_enter.grid(row = 0, column = 0, padx = 10, pady = (10,0))
 
 # "n,k' label
@@ -88,11 +95,12 @@ gen_button = ctk.CTkButton(encode_tab, text = "Get gen.pol.", command = get_poly
 gen_button.grid(row = 0, column = 1, padx = 10, pady = (10,0))
 
 # entry message
-msg_enter = ctk.CTkEntry(encode_tab, placeholder_text = "Enter message")
+msg_enter = ctk.CTkEntry(encode_tab, validate = "key", validatecommand = (validate_cmd, '%P'))
+# msg_enter = ctk.CTkEntry(encode_tab, placeholder_text = "Enter message")
 msg_enter.grid(row = 2, column = 0, padx = 10, pady = (10,0))
 
 # entry gen poly
-gen_enter = ctk.CTkEntry(encode_tab, placeholder_text = "Enter gen.pol.")
+gen_enter = ctk.CTkEntry(encode_tab, validate = "key", validatecommand = (validate_cmd, '%P'))
 gen_enter.grid(row = 3, column = 0, padx = 10, pady = (10,0))
 
 # Encode button
@@ -111,11 +119,11 @@ poly_msg.grid(row = 3, column = 2, padx = 10, pady = (10,0))
 
 # DECODE
 # entry message
-msg_enter2 = ctk.CTkEntry(decode_tab, placeholder_text = "Enter message")
+msg_enter2 = ctk.CTkEntry(decode_tab, validate = "key", validatecommand = (validate_cmd, '%P'))
 msg_enter2.grid(row = 0, column = 0, padx = 10, pady = (10,0))
 
 # entry gen.poly.
-gen_enter2 = ctk.CTkEntry(decode_tab, placeholder_text = "Enter gen.pol.")
+gen_enter2 = ctk.CTkEntry(decode_tab, validate = "key", validatecommand = (validate_cmd, '%P'))
 gen_enter2.grid(row = 1, column = 0, padx = 10, pady = (10,0))
 
 # decode button
