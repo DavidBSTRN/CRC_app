@@ -153,7 +153,7 @@ gen_enter2.grid(row = 3, column = 0, padx = 10, pady = (10,0))
 decode_button = ctk.CTkButton(decode_tab, text = "Decode", command = decode_msg)
 decode_button.grid(row = 1, column = 1, padx = 10, pady = (10,0))
 
-# Decode label
+# Decode labels
 decode_label = ctk.CTkLabel(decode_tab, text = "", anchor = "w")
 decode_label.grid(row = 1, column = 2, padx = 10, pady = (10,0))
 
