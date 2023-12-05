@@ -67,7 +67,9 @@ app = ctk.CTk()
 app.title("CRC encode and decode")
 app.resizable(False, False)
 
+# check user input
 validate_cmd = app.register(isOkay)
+
 # tabview
 tabview = ctk.CTkTabview(app)
 tabview.pack()
@@ -106,7 +108,6 @@ entry_msg_label.grid(row = 3, column = 0, padx = 10, pady = (10,0))
 
 # entry message
 msg_enter = ctk.CTkEntry(encode_tab, validate = "key", validatecommand = (validate_cmd, '%P'))
-# msg_enter = ctk.CTkEntry(encode_tab, placeholder_text = "Enter message")
 msg_enter.grid(row = 4, column = 0, padx = 10, pady = (10,0))
 
 # entry gan label
